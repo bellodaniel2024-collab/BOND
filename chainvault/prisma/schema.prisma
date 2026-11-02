@@ -1,0 +1,362 @@
+// ChainVault — Prisma Schema
+// Database: PostgreSQL
+// ORM: Prisma 5.x
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum UserStatus {
+  PENDING_VERIFICATION
+  ACTIVE
+  SUSPENDED
+  DEACTIVATED
+}
+
+enum TransactionStatus {
+  PREPARING
+  AWAITING_AUTHORIZATION
+  PENDING
+  CONFIRMING
+  CONFIRMED
+  FAILED
+  CANCELLED
+}
+
+enum TransactionType {
+  SEND
+  RECEIVE
+}
+
+enum AuditAction {
+  USER_REGISTERED
+  USER_LOGIN
+  USER_LOGOUT
+  USER_LOGIN_FAILED
+  PASSWORD_CHANGED
+  PASSWORD_RESET_REQUESTED
+  PASSWORD_RESET_COMPLETED
+  EMAIL_VERIFIED
+  TWO_FA_ENABLED
+  TWO_FA_DISABLED
+  TWO_FA_VERIFIED
+  WALLET_CONNECTED
+  WALLET_DISCONNECTED
+  SIWE_NONCE_ISSUED
+  SIWE_VERIFIED
+  TRANSACTION_INITIATED
+  TRANSACTION_CONFIRMED
+  TRANSACTION_FAILED
+  TRANSACTION_CANCELLED
+  ADMIN_USER_VIEWED
+  ADMIN_USER_SUSPENDED
+  ADMIN_USER_REINSTATED
+  SECURITY_EVENT_FLAGGED
+  RATE_LIMIT_HIT
+  SUSPICIOUS_ACTIVITY
+}
+
+enum SecurityEventSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model User {
+  id                    String             @id @default(cuid())
+  email                 String             @unique
+  emailVerified         Boolean            @default(false)
+  emailVerificationToken String?           @unique
+  emailVerificationExpiry DateTime?
+
+  // Authentication
+  passwordHash          String             // bcrypt hash — never plaintext
+  role                  UserRole           @default(USER)
+  status                UserStatus         @default(PENDING_VERIFICATION)
+
+  // Two-factor authentication
+  twoFactorEnabled      Boolean            @default(false)
+  twoFactorSecret       String?            // Encrypted TOTP secret
+  twoFactorBackupCodes  String[]           // Hashed backup codes
+
+  // Password reset
+  passwordResetToken    String?            @unique
+  passwordResetExpiry   DateTime?
+
+  // Profile
+  displayName           String?
+  avatarUrl             String?
+
+  // Timestamps
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  lastLoginAt           DateTime?
+  lastLoginIp           String?
+
+  // Relations
+  sessions              Session[]
+  wallets               ConnectedWallet[]
+  transactions          Transaction[]
+  siweNonces            SiweNonce[]
+  auditLogs             AuditLog[]
+  securityEvents        SecurityEvent[]
+  notificationPrefs     NotificationPreference?
+
+  @@index([email])
+  @@index([status])
+  @@map("users")
+}
+
+model Session {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Session data — no sensitive wallet info stored
+  token         String   @unique  // Hashed session token
+  refreshToken  String?  @unique  // Hashed refresh token
+  expiresAt     DateTime
+  refreshExpiresAt DateTime?
+
+  // Context
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  revokedAt     DateTime?
+  isRevoked     Boolean  @default(false)
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model ConnectedWallet {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Public blockchain info only — NEVER private keys or seed phrases
+  address       String   // Checksummed EVM address
+  chainId       Int      // Connected chain ID
+  walletType    String   // e.g. "metamask", "walletconnect"
+
+  // SIWE verification record
+  siweVerified  Boolean  @default(false)
+  siweVerifiedAt DateTime?
+
+  // Timestamps
+  connectedAt   DateTime @default(now())
+  lastUsedAt    DateTime?
+  disconnectedAt DateTime?
+  isActive      Boolean  @default(true)
+
+  @@unique([userId, address])
+  @@index([userId])
+  @@index([address])
+  @@map("connected_wallets")
+}
+
+model SiweNonce {
+  id          String   @id @default(cuid())
+  userId      String?  // Optional — can be pre-auth
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  nonce       String   @unique
+  address     String?  // EVM address the nonce was issued for
+  issuedAt    DateTime @default(now())
+  expiresAt   DateTime
+  usedAt      DateTime?
+  isUsed      Boolean  @default(false)
+
+  // Replay protection: once used, mark as used — never reuse
+  ipAddress   String?
+
+  @@index([nonce])
+  @@index([expiresAt])
+  @@map("siwe_nonces")
+}
+
+model Transaction {
+  id              String            @id @default(cuid())
+  userId          String
+  user            User              @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  // Transaction identity
+  type            TransactionType
+  status          TransactionStatus @default(PREPARING)
+
+  // Blockchain data — read-only references to on-chain activity
+  txHash          String?           // On-chain transaction hash (hex)
+  blockNumber     BigInt?           // Block where confirmed
+  blockHash       String?
+  confirmations   Int               @default(0)
+  requiredConfirmations Int         @default(1)
+
+  // Parties
+  fromAddress     String            // Checksummed sender address
+  toAddress       String            // Checksummed recipient address
+
+  // Asset details
+  chainId         Int
+  networkName     String
+  tokenSymbol     String
+  tokenAddress    String?           // null = native currency
+  tokenDecimals   Int               @default(18)
+
+  // Amounts (stored as strings to preserve precision)
+  amount          String            // Human-readable amount
+  amountRaw       String            // Wei/smallest unit
+  gasFee          String?           // Estimated gas fee in native currency
+  gasFeeRaw       String?
+  gasUsed         String?           // Actual gas used after confirmation
+  gasPrice        String?
+
+  // Metadata
+  nonce           Int?              // On-chain nonce
+  errorMessage    String?
+  cancelReason    String?
+  notes           String?
+
+  // Timestamps
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  submittedAt     DateTime?         // When broadcast to network
+  confirmedAt     DateTime?         // When blockchain-confirmed
+  failedAt        DateTime?
+
+  @@index([userId])
+  @@index([txHash])
+  @@index([fromAddress])
+  @@index([toAddress])
+  @@index([status])
+  @@index([chainId])
+  @@index([createdAt])
+  @@map("transactions")
+}
+
+model AuditLog {
+  id          String      @id @default(cuid())
+  userId      String?
+  user        User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  action      AuditAction
+  description String
+  metadata    Json?       // Non-sensitive contextual data only
+
+  // Context
+  ipAddress   String?
+  userAgent   String?
+  requestId   String?
+
+  createdAt   DateTime    @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model SecurityEvent {
+  id          String                 @id @default(cuid())
+  userId      String?
+  user        User?                  @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  severity    SecurityEventSeverity
+  eventType   String
+  description String
+  metadata    Json?
+
+  resolved    Boolean                @default(false)
+  resolvedAt  DateTime?
+  resolvedBy  String?
+
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime               @default(now())
+
+  @@index([userId])
+  @@index([severity])
+  @@index([resolved])
+  @@index([createdAt])
+  @@map("security_events")
+}
+
+model NotificationPreference {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  emailOnLogin          Boolean  @default(true)
+  emailOnTransaction    Boolean  @default(true)
+  emailOnSecurityEvent  Boolean  @default(true)
+  emailNewsletter       Boolean  @default(false)
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@map("notification_preferences")
+}
+
+// Admin-managed static configuration — not user data
+
+model SupportedNetwork {
+  id                  String   @id @default(cuid())
+  name                String   @unique
+  chainId             Int      @unique
+  isTestnet           Boolean  @default(true)
+  isEnabled           Boolean  @default(false)  // Production disabled by default
+  nativeCurrency      String
+  nativeSymbol        String
+  nativeDecimals      Int      @default(18)
+  rpcUrl              String?  // Stored server-side only — never exposed to client
+  blockExplorerUrl    String
+  requiredConfirmations Int    @default(1)
+  logoUrl             String?
+
+  tokens              SupportedToken[]
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("supported_networks")
+}
+
+model SupportedToken {
+  id              String           @id @default(cuid())
+  networkId       String
+  network         SupportedNetwork @relation(fields: [networkId], references: [id], onDelete: Cascade)
+
+  symbol          String
+  name            String
+  contractAddress String           // Checksummed — from official sources only
+  decimals        Int              @default(18)
+  logoUrl         String?
+  isNative        Boolean          @default(false)
+  isEnabled       Boolean          @default(true)
+  coingeckoId     String?          // For price feeds (optional)
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@unique([networkId, contractAddress])
+  @@index([networkId])
+  @@map("supported_tokens")
+}
