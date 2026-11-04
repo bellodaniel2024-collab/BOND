@@ -18,7 +18,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Initialize from localStorage or system preference
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('cv-theme') as Theme | null
+      const saved = localStorage.getItem('bond-theme') as Theme | null
       if (saved === 'dark' || saved === 'light') {
         setThemeState(saved)
         return
@@ -33,7 +33,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme)
     try {
-      localStorage.setItem('cv-theme', newTheme)
+      localStorage.setItem('bond-theme', newTheme)
     } catch {
       // localStorage unavailable
     }

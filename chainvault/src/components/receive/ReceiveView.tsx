@@ -156,7 +156,7 @@ export function ReceiveView() {
               <li>• Only send cryptocurrency supported on this network to this address.</li>
               <li>• Sending unsupported assets may result in permanent loss.</li>
               <li>• This is a testnet address — do not send real funds.</li>
-              <li>• Cryptocurrency goes directly to your connected wallet, not to ChainVault.</li>
+              <li>• Cryptocurrency goes directly to your connected wallet, not to BOND.</li>
             </ul>
           </div>
         </div>

@@ -1,5 +1,5 @@
 /**
- * ChainVault — Input Validation Schemas
+ * BOND — Input Validation Schemas
  *
  * All API inputs validated with Zod before processing.
  * Validation happens server-side — never trust client data.

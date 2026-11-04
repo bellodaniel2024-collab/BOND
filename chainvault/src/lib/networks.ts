@@ -1,5 +1,5 @@
 /**
- * ChainVault — Supported Network Configuration
+ * BOND — Supported Network Configuration
  *
  * SECURITY NOTES:
  * - Only explicitly listed networks are supported.

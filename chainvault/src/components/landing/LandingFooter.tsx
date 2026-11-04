@@ -38,7 +38,7 @@ export function LandingFooter() {
                 <ShieldCheck className="text-white" size={16} />
               </div>
               <span className="font-display font-bold text-sm" style={{ color: 'var(--text-primary)' }}>
-                ChainVault
+                BOND
               </span>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
@@ -73,7 +73,7 @@ export function LandingFooter() {
           style={{ borderColor: 'var(--border-subtle)' }}
         >
           <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-            &copy; {new Date().getFullYear()} ChainVault. Development preview — not for production use.
+            &copy; {new Date().getFullYear()} BOND. Development preview — not for production use.
           </p>
           <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
             Non-custodial &middot; Testnet only &middot; No real funds

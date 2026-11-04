@@ -6,28 +6,28 @@ import { ChevronDown } from 'lucide-react'
 
 const FAQS = [
   {
-    q: 'Does ChainVault hold my cryptocurrency?',
-    a: 'No. ChainVault is non-custodial. Your cryptocurrency stays in your own wallet at all times. We facilitate the transaction interface, but funds move directly between wallets on the blockchain — we never hold them.',
+    q: 'Does BOND hold my cryptocurrency?',
+    a: 'No. BOND is non-custodial. Your cryptocurrency stays in your own wallet at all times. We facilitate the transaction interface, but funds move directly between wallets on the blockchain — we never hold them.',
   },
   {
-    q: 'Does ChainVault have access to my private key or seed phrase?',
-    a: 'Never. ChainVault does not request, transmit, or store private keys or seed phrases. All transaction signing happens inside your external wallet (MetaMask, WalletConnect, etc.).',
+    q: 'Does BOND have access to my private key or seed phrase?',
+    a: 'Never. BOND does not request, transmit, or store private keys or seed phrases. All transaction signing happens inside your external wallet (MetaMask, WalletConnect, etc.).',
   },
   {
     q: 'What wallets are supported?',
-    a: 'ChainVault supports any EVM-compatible wallet, including MetaMask, WalletConnect-compatible wallets, and browser-injected wallets like Brave Wallet and Rabby.',
+    a: 'BOND supports any EVM-compatible wallet, including MetaMask, WalletConnect-compatible wallets, and browser-injected wallets like Brave Wallet and Rabby.',
   },
   {
     q: 'Is this safe to use on mainnet right now?',
-    a: 'ChainVault is currently in development and operates on testnets. Mainnet support is disabled until an independent professional security audit and compliance review are completed. Do not use this platform for real funds until production launch is announced.',
+    a: 'BOND is currently in development and operates on testnets. Mainnet support is disabled until an independent professional security audit and compliance review are completed. Do not use this platform for real funds until production launch is announced.',
   },
   {
-    q: 'How does ChainVault confirm a transaction?',
+    q: 'How does BOND confirm a transaction?',
     a: 'Transaction status is verified directly from the blockchain using RPC providers. We do not declare a transaction confirmed until the blockchain receipt is verified and the required number of block confirmations have passed.',
   },
   {
     q: 'What happens if a transaction fails?',
-    a: 'If a transaction fails or is reverted on-chain, ChainVault updates its status to Failed and provides the reason from the blockchain receipt. Since transactions are signed by your wallet and sent to the blockchain, gas fees for failed transactions may still be consumed by the network — this is a blockchain behaviour, not a ChainVault decision.',
+    a: 'If a transaction fails or is reverted on-chain, BOND updates its status to Failed and provides the reason from the blockchain receipt. Since transactions are signed by your wallet and sent to the blockchain, gas fees for failed transactions may still be consumed by the network — this is a blockchain behaviour, not a BOND decision.',
   },
   {
     q: 'How is my account protected?',

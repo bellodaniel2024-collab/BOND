@@ -37,7 +37,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             <ShieldCheck size={14} className="text-white" />
           </div>
           <div>
-            <span className="font-bold text-sm block" style={{ color: 'var(--text-primary)' }}>ChainVault</span>
+            <span className="font-bold text-sm block" style={{ color: 'var(--text-primary)' }}>BOND</span>
             <span className="text-xs badge-danger">Admin</span>
           </div>
         </div>

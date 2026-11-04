@@ -36,9 +36,9 @@ export default function PrivacyPage() {
               2. Data We Never Collect
             </h2>
             <ul className="list-disc pl-4 space-y-1">
-              <li>Private keys or seed phrases — ChainVault will never ask for or store these.</li>
+              <li>Private keys or seed phrases — BOND will never ask for or store these.</li>
               <li>Plaintext passwords — passwords are hashed with bcrypt before storage.</li>
-              <li>Cryptocurrency funds — ChainVault is non-custodial and holds no user funds.</li>
+              <li>Cryptocurrency funds — BOND is non-custodial and holds no user funds.</li>
             </ul>
           </section>
 
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
               4. Third-Party Services
             </h2>
             <p>
-              ChainVault uses blockchain RPC providers (Infura, Alchemy) to read blockchain data.
+              BOND uses blockchain RPC providers (Infura, Alchemy) to read blockchain data.
               These providers may record RPC request metadata. WalletConnect (Reown) facilitates
               wallet connections and operates under its own privacy policy.
             </p>

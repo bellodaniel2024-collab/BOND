@@ -248,9 +248,9 @@ export function SecurityView() {
             Your Private Keys are Always Safe
           </p>
           <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            ChainVault never asks for, stores, or has access to your private key or seed phrase.
+            BOND never asks for, stores, or has access to your private key or seed phrase.
             All transaction signing happens exclusively inside your external wallet.
-            If anyone — including a message claiming to be ChainVault — asks for your private
+            If anyone — including a message claiming to be BOND — asks for your private
             key or seed phrase, it is a scam. Never share them.
           </p>
         </div>

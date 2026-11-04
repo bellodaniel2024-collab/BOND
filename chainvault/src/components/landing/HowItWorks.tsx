@@ -9,7 +9,7 @@ const STEPS = [
     icon: Wallet,
     title: 'Connect Your Wallet',
     description:
-      'Connect your existing MetaMask, WalletConnect, or compatible wallet. ChainVault works with wallets you already own.',
+      'Connect your existing MetaMask, WalletConnect, or compatible wallet. BOND works with wallets you already own.',
   },
   {
     number: '02',
@@ -23,14 +23,14 @@ const STEPS = [
     icon: PenLine,
     title: 'Authorize in Your Wallet',
     description:
-      'Your wallet — not ChainVault — prompts you to sign the transaction. Your private key never leaves your device.',
+      'Your wallet — not BOND — prompts you to sign the transaction. Your private key never leaves your device.',
   },
   {
     number: '04',
     icon: CheckCircle2,
     title: 'Confirm On-Chain',
     description:
-      'The transaction is broadcast directly to the blockchain. ChainVault monitors and reports the confirmed status.',
+      'The transaction is broadcast directly to the blockchain. BOND monitors and reports the confirmed status.',
   },
 ]
 
@@ -66,7 +66,7 @@ export function HowItWorks() {
             className="text-lg max-w-xl mx-auto"
             style={{ color: 'var(--text-secondary)' }}
           >
-            Every step is designed so you remain in control. ChainVault facilitates — you authorize.
+            Every step is designed so you remain in control. BOND facilitates — you authorize.
           </motion.p>
         </div>
 

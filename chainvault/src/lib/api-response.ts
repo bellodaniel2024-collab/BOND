@@ -1,5 +1,5 @@
 /**
- * ChainVault — Standardized API Response Utilities
+ * BOND — Standardized API Response Utilities
  *
  * SECURITY:
  * - Error messages never expose internal stack traces to clients.

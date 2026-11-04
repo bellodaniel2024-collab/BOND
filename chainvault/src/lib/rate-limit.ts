@@ -1,5 +1,5 @@
 /**
- * ChainVault — Rate Limiting
+ * BOND — Rate Limiting
  *
  * In-memory rate limiter for development.
  * In production, replace with Redis-backed rate-limiter-flexible.

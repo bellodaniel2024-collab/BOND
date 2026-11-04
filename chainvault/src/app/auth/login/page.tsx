@@ -3,7 +3,7 @@ import { LoginForm } from '@/components/auth/LoginForm'
 
 export const metadata: Metadata = {
   title: 'Sign In',
-  description: 'Sign in to your ChainVault account.',
+  description: 'Sign in to your BOND account.',
 }
 
 export default function LoginPage() {

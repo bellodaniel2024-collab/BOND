@@ -1,5 +1,5 @@
 /**
- * ChainVault — Authentication Tests
+ * BOND — Authentication Tests
  * Run with: npm run test
  */
 import { describe, it, expect } from 'vitest'

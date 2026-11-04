@@ -60,7 +60,7 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
             <ShieldCheck className="text-white" size={20} />
           </div>
           <span className="font-display font-bold text-lg" style={{ color: 'var(--text-primary)' }}>
-            ChainVault
+            BOND
           </span>
         </Link>
 

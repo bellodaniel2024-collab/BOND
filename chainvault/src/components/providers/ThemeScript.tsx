@@ -9,7 +9,7 @@ export function ThemeScript() {
   const script = `
     (function() {
       try {
-        var saved = localStorage.getItem('cv-theme');
+        var saved = localStorage.getItem('bond-theme');
         var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         var theme = saved === 'dark' || saved === 'light'
           ? saved

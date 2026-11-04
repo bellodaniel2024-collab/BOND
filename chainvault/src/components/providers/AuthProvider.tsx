@@ -28,27 +28,46 @@ interface AuthContextValue {
   user: AuthUser | null
   isLoading: boolean
   isAuthenticated: boolean
-  refetch: () => Promise<void>
+  refetch: () => Promise<AuthUser | null>
   logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
+// Fetch with timeout — prevents infinite loading when the server is
+// unresponsive (e.g. cold start, DB connection issue, missing env vars).
+function fetchWithTimeout(url: string, options: RequestInit, timeoutMs = 10000): Promise<Response> {
+  return Promise.race([
+    fetch(url, options),
+    new Promise<Response>((_, reject) =>
+      setTimeout(
+        () => reject(new Error(`Request to ${url} timed out after ${timeoutMs}ms`)),
+        timeoutMs,
+      ),
+    ),
+  ])
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  const fetchUser = useCallback(async () => {
+  const fetchUser = useCallback(async (): Promise<AuthUser | null> => {
     try {
-      const res = await fetch('/api/auth/me', { credentials: 'include' })
+      const res = await fetchWithTimeout('/api/auth/me', { credentials: 'include' }, 10000)
       if (res.ok) {
         const data = await res.json()
-        setUser(data.data?.user ?? null)
+        const fetchedUser = data.data?.user ?? null
+        setUser(fetchedUser)
+        return fetchedUser
       } else {
         setUser(null)
+        return null
       }
     } catch {
+      // Network error, timeout, or JSON parse error — treat as logged out
       setUser(null)
+      return null
     } finally {
       setIsLoading(false)
     }
@@ -57,6 +76,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' })
+    } catch {
+      // Even if logout API fails, clear user state on the client
     } finally {
       setUser(null)
     }

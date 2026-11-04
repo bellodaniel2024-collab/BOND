@@ -1,5 +1,5 @@
 /**
- * ChainVault — Authentication Utilities
+ * BOND — Authentication Utilities
  *
  * SECURITY:
  * - Passwords hashed with bcrypt (cost factor 12)
@@ -14,13 +14,19 @@ import { randomBytes, createHash } from 'crypto'
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const BCRYPT_ROUNDS = 12
-const JWT_SECRET = process.env['JWT_SECRET']!
+
+// Lazy env var access — prevents server crash at import time when env
+// vars are missing in deployment. Errors surface clearly at call time.
+function getJwtSecret(): string {
+  const secret = process.env['JWT_SECRET']
+  if (!secret && process.env['NODE_ENV'] !== 'test') {
+    throw new Error('Server configuration error: JWT_SECRET is not set.')
+  }
+  return secret || 'test-jwt-secret-for-testing-only-32-chars!!'
+}
+
 const JWT_EXPIRES_IN = process.env['JWT_EXPIRES_IN'] ?? '15m'
 const REFRESH_EXPIRES_IN = process.env['REFRESH_TOKEN_EXPIRES_IN'] ?? '7d'
-
-if (!JWT_SECRET && process.env['NODE_ENV'] !== 'test') {
-  throw new Error('[Security] JWT_SECRET environment variable is not set.')
-}
 
 // ─── Password Hashing ────────────────────────────────────────────────────────
 
@@ -59,7 +65,7 @@ export interface JwtPayload {
 }
 
 export function signAccessToken(payload: JwtPayload): string {
-  return jwt.sign(payload, JWT_SECRET, {
+  return jwt.sign(payload, getJwtSecret(), {
     expiresIn: JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'],
     issuer: 'bond',
     audience: 'bond-api',
@@ -69,7 +75,7 @@ export function signAccessToken(payload: JwtPayload): string {
 export function signRefreshToken(userId: string, sessionId: string): string {
   return jwt.sign(
     { sub: userId, sessionId, type: 'refresh' },
-    JWT_SECRET,
+    getJwtSecret(),
     {
       expiresIn: REFRESH_EXPIRES_IN as jwt.SignOptions['expiresIn'],
       issuer: 'bond',
@@ -79,7 +85,7 @@ export function signRefreshToken(userId: string, sessionId: string): string {
 }
 
 export function verifyAccessToken(token: string): JwtPayload {
-  const decoded = jwt.verify(token, JWT_SECRET, {
+  const decoded = jwt.verify(token, getJwtSecret(), {
     issuer: 'bond',
     audience: 'bond-api',
   }) as JwtPayload
@@ -87,7 +93,7 @@ export function verifyAccessToken(token: string): JwtPayload {
 }
 
 export function verifyRefreshToken(token: string): { sub: string; sessionId: string } {
-  const decoded = jwt.verify(token, JWT_SECRET, {
+  const decoded = jwt.verify(token, getJwtSecret(), {
     issuer: 'bond',
     audience: 'bond-refresh',
   }) as { sub: string; sessionId: string }

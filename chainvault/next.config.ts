@@ -62,8 +62,20 @@ const nextConfig: NextConfig = {
   },
 
   // Transpile wagmi / viem ESM packages
-  experimental: {
-    serverComponentsExternalPackages: ['bcryptjs', 'otplib'],
+  serverExternalPackages: ['bcryptjs', 'otplib'],
+
+  // Handle transitive dependencies from wagmi/coinbase SDK that have
+  // optional packages not installed in our project. These are from
+  // the Coinbase Smart Wallet / x402 payment protocol which we don't use.
+  webpack: (config, { webpack }) => {
+    config.plugins = config.plugins || []
+    // Completely ignore all @x402/* imports — we don't use Coinbase x402 payments
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^@x402\/.*$/,
+      }),
+    )
+    return config
   },
 
   // Image optimization

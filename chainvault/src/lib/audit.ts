@@ -1,5 +1,5 @@
 /**
- * ChainVault — Audit Logging
+ * BOND — Audit Logging
  *
  * All security-significant actions are recorded in the audit log.
  * Logs are append-only — never deleted or modified.

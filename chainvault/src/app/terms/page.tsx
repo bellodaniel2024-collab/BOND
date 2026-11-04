@@ -18,7 +18,7 @@ export default function TermsPage() {
             borderColor: 'rgba(245,158,11,0.2)',
             color: '#d97706',
           }}>
-            <strong>Development Preview.</strong> ChainVault is currently in development and operates on testnets only.
+            <strong>Development Preview.</strong> BOND is currently in development and operates on testnets only.
             These terms apply to the development preview. Full terms will be published before production launch.
             Do not use this platform with real cryptocurrency or on mainnet.
           </div>
@@ -26,7 +26,7 @@ export default function TermsPage() {
           {[
             {
               title: '1. Non-Custodial Nature',
-              body: 'ChainVault is a non-custodial platform. You retain full control of your cryptocurrency at all times. ChainVault does not hold, manage, or have access to your funds. All transactions require your explicit authorization through your external wallet.',
+              body: 'BOND is a non-custodial platform. You retain full control of your cryptocurrency at all times. BOND does not hold, manage, or have access to your funds. All transactions require your explicit authorization through your external wallet.',
             },
             {
               title: '2. Development Preview',
@@ -34,11 +34,11 @@ export default function TermsPage() {
             },
             {
               title: '3. User Responsibility',
-              body: 'You are responsible for the security of your wallet, private keys, and seed phrases. ChainVault will never ask for your private key or seed phrase. If any message claims to be from ChainVault and asks for these credentials, it is a scam.',
+              body: 'You are responsible for the security of your wallet, private keys, and seed phrases. BOND will never ask for your private key or seed phrase. If any message claims to be from BOND and asks for these credentials, it is a scam.',
             },
             {
               title: '4. No Financial Advice',
-              body: 'ChainVault provides a transaction facilitation platform, not financial advice. Nothing on this platform should be construed as financial, investment, tax, or legal advice.',
+              body: 'BOND provides a transaction facilitation platform, not financial advice. Nothing on this platform should be construed as financial, investment, tax, or legal advice.',
             },
             {
               title: '5. No Warranties',
@@ -46,7 +46,7 @@ export default function TermsPage() {
             },
             {
               title: '6. Irreversible Transactions',
-              body: 'Blockchain transactions are irreversible once confirmed. ChainVault cannot reverse, cancel, or modify confirmed transactions. Always verify recipient addresses before authorizing a transaction.',
+              body: 'Blockchain transactions are irreversible once confirmed. BOND cannot reverse, cancel, or modify confirmed transactions. Always verify recipient addresses before authorizing a transaction.',
             },
           ].map((section) => (
             <section key={section.title}>

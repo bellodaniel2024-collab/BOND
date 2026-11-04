@@ -147,7 +147,7 @@ export function HeroSection() {
           style={{ color: 'var(--text-secondary)' }}
         >
           Send and receive cryptocurrency directly from your own wallet.
-          ChainVault never holds your funds — every transaction requires
+          BOND never holds your funds — every transaction requires
           your explicit authorization.
         </motion.p>
 

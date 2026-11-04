@@ -68,7 +68,7 @@ export function Sidebar({ onClose }: SidebarProps) {
             <ShieldCheck className="w-4.5 h-4.5 text-white" size={18} />
           </div>
           <span className="font-display font-bold text-base" style={{ color: 'var(--text-primary)' }}>
-            ChainVault
+            BOND
           </span>
         </Link>
         {onClose && (

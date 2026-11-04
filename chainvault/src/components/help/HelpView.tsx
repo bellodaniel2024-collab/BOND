@@ -86,7 +86,7 @@ export function HelpView() {
           Need More Help?
         </h3>
         <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-          ChainVault is in active development. For questions or issues, check back
+          BOND is in active development. For questions or issues, check back
           when the full support system is launched.
         </p>
         <span className="badge-info text-xs">Support system coming soon</span>

@@ -140,7 +140,7 @@ export function RegisterForm() {
   return (
     <AuthLayout
       title="Create Account"
-      subtitle="Join ChainVault — your keys, your crypto."
+      subtitle="Join BOND — your keys, your crypto."
     >
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         {/* Display name */}

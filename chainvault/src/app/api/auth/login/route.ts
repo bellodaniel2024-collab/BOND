@@ -6,7 +6,7 @@
  * - Password compared with bcrypt.compare (constant-time)
  * - Generic error messages — no user enumeration
  * - 2FA required if enabled
- * - Session created with iron-session (HttpOnly, SameSite=Strict)
+ * - Session created with iron-session (HttpOnly, SameSite=Lax)
  * - Audit logged on success and failure
  */
 import { NextRequest } from 'next/server'
@@ -18,7 +18,6 @@ import { getSession } from '@/lib/session'
 import { checkRateLimit, getRateLimitKey, RATE_LIMITS } from '@/lib/rate-limit'
 import { auditLog, securityEvent, getAuditContext } from '@/lib/audit'
 import { ZodError } from 'zod'
-import { cookies } from 'next/headers'
 
 export async function POST(req: NextRequest) {
   // ── Rate limiting ────────────────────────────────────────────────────────
@@ -98,7 +97,6 @@ export async function POST(req: NextRequest) {
     // ── Two-factor authentication ─────────────────────────────────────────
     if (user.twoFactorEnabled) {
       // Set pending 2FA state in session — do not fully authenticate yet
-      const cookieStore = await cookies()
       const session = await getSession()
       session.pendingTwoFactor = true
       session.pendingUserId = user.id

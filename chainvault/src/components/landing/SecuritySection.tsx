@@ -17,7 +17,7 @@ const SECURITY_PILLARS = [
     icon: KeyRound,
     title: 'Private Key Protection',
     description:
-      'ChainVault never requests, stores, or transmits private keys or seed phrases. All signing happens exclusively inside your external wallet.',
+      'BOND never requests, stores, or transmits private keys or seed phrases. All signing happens exclusively inside your external wallet.',
   },
   {
     icon: Eye,
@@ -133,7 +133,7 @@ export function SecuritySection() {
               Independent security review required before production use
             </p>
             <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-              ChainVault is in active development. While security principles are applied throughout,
+              BOND is in active development. While security principles are applied throughout,
               no platform should handle real customer funds without a qualified independent security
               audit and appropriate legal and compliance review. Do not use this platform on mainnet
               until that process is complete.

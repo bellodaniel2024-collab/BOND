@@ -1,5 +1,5 @@
 /**
- * ChainVault — Blockchain Interaction Utilities
+ * BOND — Blockchain Interaction Utilities
  *
  * Server-side viem utilities for:
  * - Transaction receipt verification

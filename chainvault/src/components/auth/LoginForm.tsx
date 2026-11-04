@@ -1,16 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Eye, EyeOff, Loader2, AlertCircle, ShieldCheck } from 'lucide-react'
 import { AuthLayout } from './AuthLayout'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useAuth } from '@/components/providers/AuthProvider'
 
 export function LoginForm() {
-  const router = useRouter()
-  const { refetch } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -29,12 +25,18 @@ export function LoginForm() {
         ? { email, password, twoFactorToken: twoFactorCode }
         : { email, password }
 
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(body),
-      })
+      // Race the fetch against a timeout so the user is never stuck
+      const res = await Promise.race([
+        fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(body),
+        }),
+        new Promise<Response>((_, reject) =>
+          setTimeout(() => reject(new Error('Request timed out')), 15000),
+        ),
+      ])
 
       const data = await res.json()
 
@@ -46,22 +48,26 @@ export function LoginForm() {
         } else if (data.code === 'SUSPENDED') {
           setError('Your account has been suspended. Please contact support.')
         } else {
-          setError(data.error ?? 'Login failed.')
+          setError(data.error ?? 'Login failed. Please check your credentials.')
         }
         return
       }
 
       if (data.data?.requiresTwoFactor) {
         setRequiresTwoFactor(true)
+        setIsLoading(false)
         return
       }
 
-      // Refresh auth context
-      await refetch()
-      router.push('/dashboard')
+      // Login succeeded — do a HARD redirect (full page load) so the
+      // browser sends the fresh session cookie with the dashboard request.
+      // Using window.location.href instead of router.push avoids a race
+      // condition where the client-side navigation might not include the
+      // Set-Cookie from the login response.
+      window.location.href = '/dashboard'
+      // Don't setIsLoading(false) here — let the spinner show during navigation
     } catch {
-      setError('An unexpected error occurred. Please try again.')
-    } finally {
+      setError('Unable to reach the server. Please check your connection and try again.')
       setIsLoading(false)
     }
   }
@@ -72,7 +78,7 @@ export function LoginForm() {
       subtitle={
         requiresTwoFactor
           ? 'Enter the 6-digit code from your authenticator app.'
-          : 'Sign in to your ChainVault account.'
+          : 'Sign in to your BOND account.'
       }
     >
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>

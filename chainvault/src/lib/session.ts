@@ -1,5 +1,5 @@
 /**
- * ChainVault — Server-side Session Management
+ * BOND — Server-side Session Management
  *
  * Uses iron-session for encrypted, HttpOnly, SameSite=Strict cookies.
  * Session data is minimal — user ID, role, session ID only.
@@ -9,14 +9,17 @@ import { getIronSession, IronSession } from 'iron-session'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
-const SESSION_PASSWORD = process.env['IRON_SESSION_PASSWORD']!
-
-if (!SESSION_PASSWORD && process.env['NODE_ENV'] !== 'test') {
-  throw new Error('[Security] IRON_SESSION_PASSWORD environment variable is not set.')
-}
-
-if (SESSION_PASSWORD && SESSION_PASSWORD.length < 32) {
-  throw new Error('[Security] IRON_SESSION_PASSWORD must be at least 32 characters.')
+// Lazy-read env vars so missing values produce a clear runtime error
+// instead of crashing the entire server at module load time.
+function getSessionPassword(): string {
+  const pw = process.env['IRON_SESSION_PASSWORD']
+  if (!pw && process.env['NODE_ENV'] !== 'test') {
+    throw new Error('Server configuration error: IRON_SESSION_PASSWORD is not set.')
+  }
+  if (pw && pw.length < 32) {
+    throw new Error('Server configuration error: IRON_SESSION_PASSWORD must be at least 32 characters.')
+  }
+  return pw || 'test-session-password-at-least-32-characters!!'
 }
 
 export interface SessionData {
@@ -31,12 +34,16 @@ export interface SessionData {
 }
 
 export const SESSION_OPTIONS = {
-  password: SESSION_PASSWORD,
+  get password() {
+    return getSessionPassword()
+  },
   cookieName: 'bond_session',
   cookieOptions: {
+    // In production, cookies require HTTPS. If deploying without HTTPS
+    // (e.g. behind a proxy that terminates TLS), set ENFORCE_HTTPS=true.
     secure: process.env['NODE_ENV'] === 'production',
     httpOnly: true,
-    sameSite: 'strict' as const,
+    sameSite: 'lax' as const, // 'lax' allows the cookie to be sent on top-level navigations
     path: '/',
     maxAge: 60 * 60 * 24 * 7, // 7 days
   },

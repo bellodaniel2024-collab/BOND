@@ -41,7 +41,7 @@
 /* ─── Base Reset ──────────────────────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after {
-    @apply border-border;
+    border-color: var(--border-subtle);
   }
 
   html {

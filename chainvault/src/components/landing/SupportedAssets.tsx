@@ -40,7 +40,7 @@ export function SupportedAssets() {
             className="text-base max-w-xl mx-auto"
             style={{ color: 'var(--text-secondary)' }}
           >
-            ChainVault is currently operating on test networks. Production mainnet support
+            BOND is currently operating on test networks. Production mainnet support
             will be enabled after a full independent security review and compliance process.
           </motion.p>
         </div>

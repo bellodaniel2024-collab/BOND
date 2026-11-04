@@ -1,4 +1,4 @@
-# ChainVault
+# BOND
 
 **Secure Non-Custodial Cryptocurrency Transaction Platform**
 
@@ -7,28 +7,28 @@
 
 ---
 
-## What is ChainVault?
+## What is BOND?
 
-ChainVault is a non-custodial cryptocurrency transaction platform. Users connect their own external wallets (MetaMask, WalletConnect) and send/receive cryptocurrency directly — ChainVault never holds or controls user funds.
+BOND is a non-custodial cryptocurrency transaction platform. Users connect their own external wallets (MetaMask, WalletConnect) and send/receive cryptocurrency directly — BOND never holds or controls user funds.
 
 ### Core Principle
 
-Every transaction requires explicit user authorization through their external wallet. ChainVault prepares and displays the transaction; the user's wallet signs it.
+Every transaction requires explicit user authorization through their external wallet. BOND prepares and displays the transaction; the user's wallet signs it.
 
 ---
 
 ## Features
 
-- 🔐 Secure email + password authentication (bcrypt, HttpOnly cookies)
-- 👛 MetaMask and WalletConnect integration (wagmi + viem)
-- 📤 Send cryptocurrency with server-side validation
-- 📥 Receive cryptocurrency via QR code + address display
-- 📊 Transaction history with live status updates
-- ✅ On-chain transaction receipt verification
-- 🌙 Dark and light themes
-- 📱 Fully responsive design
-- 🛡️ SIWE (Sign-In with Ethereum) wallet verification
-- 👮 Admin dashboard (monitoring only)
+- Secure email + password authentication (bcrypt, HttpOnly cookies)
+- MetaMask and WalletConnect integration (wagmi + viem)
+- Send cryptocurrency with server-side validation
+- Receive cryptocurrency via QR code + address display
+- Transaction history with live status updates
+- On-chain transaction receipt verification
+- Dark and light themes
+- Fully responsive design
+- SIWE (Sign-In with Ethereum) wallet verification
+- Admin dashboard (monitoring only)
 
 ---
 
@@ -88,6 +88,14 @@ See `.env.example` for all required variables. Critical ones:
 | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | WalletConnect project ID |
 | `NEXT_PUBLIC_SEPOLIA_RPC_URL` | Sepolia testnet RPC |
 
+**Required for deployment:**
+- `DATABASE_URL` — your production PostgreSQL connection string
+- `IRON_SESSION_PASSWORD` — at least 32 characters of random text
+- `JWT_SECRET` — at least 64 characters of random text
+- `NEXT_PUBLIC_APP_URL` — your deployed URL (e.g. `https://yourdomain.com`)
+- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` — from Reown cloud
+- `NEXT_PUBLIC_SEPOLIA_RPC_URL` — RPC endpoint for Sepolia
+
 ---
 
 ## Security
@@ -117,10 +125,10 @@ npx tsc --noEmit
 
 | Network | Status |
 |---------|--------|
-| Ethereum Sepolia | ✅ Enabled (Testnet) |
-| Polygon Amoy | ✅ Enabled (Testnet) |
-| Ethereum Mainnet | ❌ Disabled (pending security audit) |
-| Polygon Mainnet | ❌ Disabled (pending security audit) |
+| Ethereum Sepolia | Enabled (Testnet) |
+| Polygon Amoy | Enabled (Testnet) |
+| Ethereum Mainnet | Disabled (pending security audit) |
+| Polygon Mainnet | Disabled (pending security audit) |
 
 ---
 

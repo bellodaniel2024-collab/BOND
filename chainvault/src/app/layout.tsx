@@ -18,8 +18,8 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: {
-    default: 'ChainVault — Secure Non-Custodial Cryptocurrency Transactions',
-    template: '%s | ChainVault',
+    default: 'BOND — Secure Non-Custodial Cryptocurrency Transactions',
+    template: '%s | BOND',
   },
   description:
     'Send and receive cryptocurrency directly from your own wallet. Non-custodial, transparent, and secure. You control your keys.',
@@ -32,19 +32,19 @@ export const metadata: Metadata = {
     'secure transactions',
     'defi',
   ],
-  authors: [{ name: 'ChainVault' }],
-  creator: 'ChainVault',
+  authors: [{ name: 'BOND' }],
+  creator: 'BOND',
   metadataBase: new URL(process.env['NEXT_PUBLIC_APP_URL'] ?? 'http://localhost:3000'),
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    title: 'ChainVault — Secure Non-Custodial Cryptocurrency Transactions',
+    title: 'BOND — Secure Non-Custodial Cryptocurrency Transactions',
     description: 'You control your keys. We never touch your funds.',
-    siteName: 'ChainVault',
+    siteName: 'BOND',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ChainVault',
+    title: 'BOND',
     description: 'Secure non-custodial cryptocurrency transactions.',
   },
   robots: {

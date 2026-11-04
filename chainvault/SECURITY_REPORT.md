@@ -1,4 +1,4 @@
-# ChainVault — Security Architecture Report
+# BOND — Security Architecture Report
 
 ## Status: Development Preview (Testnet Only)
 
@@ -119,7 +119,7 @@ Production disabled:
 ## Non-Custodial Architecture Verification
 
 The platform is architecturally non-custodial:
-- ChainVault holds no user funds at any point
+- BOND holds no user funds at any point
 - Private keys never leave the user's wallet
 - Transactions signed exclusively by user's external wallet
 - Platform only records public transaction data (hashes, addresses, amounts)

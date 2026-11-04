@@ -1,5 +1,5 @@
 /**
- * ChainVault — Input Validation Tests
+ * BOND — Input Validation Tests
  */
 import { describe, it, expect } from 'vitest'
 import {

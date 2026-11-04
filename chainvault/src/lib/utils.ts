@@ -1,5 +1,5 @@
 /**
- * ChainVault — Shared Utility Functions
+ * BOND — Shared Utility Functions
  */
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'

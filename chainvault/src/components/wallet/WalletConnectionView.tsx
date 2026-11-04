@@ -35,7 +35,7 @@ export function WalletConnectionView() {
           Wallet Connection
         </h1>
         <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
-          Connect your external wallet. ChainVault never requests private keys or seed phrases.
+          Connect your external wallet. BOND never requests private keys or seed phrases.
         </p>
       </div>
 
@@ -50,7 +50,7 @@ export function WalletConnectionView() {
         >
           <ShieldCheck size={16} className="text-blue-500 flex-shrink-0 mt-0.5" />
           <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            ChainVault will never ask for your private key or seed phrase.
+            BOND will never ask for your private key or seed phrase.
             Only your public wallet address is used by this platform.
           </p>
         </div>
